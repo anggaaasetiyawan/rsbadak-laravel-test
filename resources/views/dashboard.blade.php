@@ -58,7 +58,9 @@
     </nav>
     <div class="content">
         <h1>Dashboard</h1>
-        <p>Selamat datang, {{ Auth::user()->name }}.</p>
+        <p>Selamat datang, {{ Auth::user()->name }}. Di Aplikasi Pendaftaran Pasien</p>
+        <p>Di dashboard ini, Anda dapat mengelola data pasien, dokter, poliklinik, jadwal dokter, dan registrasi.</p>
+        <p>Gunakan menu navigasi di atas untuk mengelola data pasien, dokter, poliklinik, jadwal dokter, dan registrasi.</p>
     </div>
 </body>
 </html>
