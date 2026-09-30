@@ -24,7 +24,7 @@ class DokterController extends Controller
         $doctors = $query->orderBy('name')->paginate(15)->withQueryString();
         $polyclinics = Polyclinic::where('is_active', true)->orderBy('name')->get();
 
-        return view('dokters.index', compact('dokters', 'polyclinics'));
+        return view('dokters.index', compact('doctors', 'polyclinics'));
     }
 
     public function create()

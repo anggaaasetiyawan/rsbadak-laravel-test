@@ -40,11 +40,17 @@
 </head>
 <body>
     <nav>
-        <span>{{ Auth::user()->name }}</span>
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit">Logout</button>
-        </form>
+        <div>
+            <a href="/admin/dashboard"style="color:#aaa;text-decoration:none;font-size:.875rem;margin-right:1rem">Dashboard</a>
+            <a href="{{ route('dokters.index') }}" style="color:#aaa;text-decoration:none;font-size:.875rem;margin-right:1rem">Dokter</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem">
+            <span>{{ Auth::user()->name }}</span>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Logout</button>
+            </form>
+        </div>
     </nav>
     <div class="content">
         <h1>Dashboard</h1>

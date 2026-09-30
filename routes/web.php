@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DokterController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,6 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', fn () => view('dashboard'));
     Route::get('/petugas/dashboard', fn () => view('dashboard'));
+
+    Route::resource('dokters', DokterController::class);
 });
