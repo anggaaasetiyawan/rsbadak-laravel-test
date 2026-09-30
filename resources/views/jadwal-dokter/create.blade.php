@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Poliklinik</title>
+    <title>Tambah Jadwal Dokter</title>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; margin: 0; }
         nav { background: #111; color: #fff; padding: .75rem 2rem; display: flex; justify-content: space-between; align-items: center; }
@@ -18,7 +18,7 @@
         h1 { font-size: 1.25rem; margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1rem; }
         label { display: block; font-size: .875rem; font-weight: 600; margin-bottom: .25rem; }
-        input { width: 100%; padding: .5rem; border: 1px solid #ccc; font-size: .875rem; box-sizing: border-box; }
+        input, select { width: 100%; padding: .5rem; border: 1px solid #ccc; font-size: .875rem; box-sizing: border-box; }
         .error { color: #991b1b; font-size: .8rem; margin-top: .25rem; }
         .btn { display: inline-block; padding: .5rem 1rem; font-size: .875rem; border: none; cursor: pointer; text-decoration: none; }
         .btn-primary { background: #111; color: #fff; }
@@ -26,8 +26,6 @@
         .btn-secondary { background: #e5e5e5; color: #111; }
         .btn-secondary:hover { background: #d4d4d4; }
         .actions { display: flex; gap: .5rem; margin-top: 1.5rem; }
-        .checkbox-group { display: flex; align-items: center; gap: .5rem; }
-        .checkbox-group input { width: auto; }
     </style>
 </head>
 <body>
@@ -36,7 +34,7 @@
             <a href="/admin/dashboard">Dashboard</a>
             <a href="{{ route('pasien.index') }}">Pasien</a>
             <a href="{{ route('dokters.index') }}">Dokter</a>
-            <a href="{{ route('polikliniks.index') }}" style="color:#fff">Poliklinik</a>
+            <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
             <a href="{{ route('jadwal-dokter.index') }}">Jadwal</a>
             <a href="{{ route('registrasi.index') }}">Registrasi</a>
         </div>
@@ -49,26 +47,48 @@
         </div>
     </nav>
     <div class="container">
-        <h1>Edit Poliklinik</h1>
+        <h1>Tambah Jadwal Dokter</h1>
 
-        <form method="POST" action="{{ route('polikliniks.update', $poliklinik) }}">
+        <form method="POST" action="{{ route('jadwal-dokter.store') }}">
             @csrf
-            @method('PUT')
             <div class="form-group">
-                <label for="name">Nama Poliklinik</label>
-                <input type="text" name="name" id="name" value="{{ old('name', $poliklinik->name) }}" required>
-                @error('name')<div class="error">{{ $message }}</div>@enderror
+                <label for="doctor_id">Dokter</label>
+                <select name="doctor_id" id="doctor_id" required>
+                    <option value="">Pilih Dokter</option>
+                    @foreach($doctors as $d)
+                        <option value="{{ $d->id }}" {{ old('doctor_id') == $d->id ? 'selected' : '' }}>{{ $d->name }} ({{ $d->polyclinic->name ?? '-' }})</option>
+                    @endforeach
+                </select>
+                @error('doctor_id')<div class="error">{{ $message }}</div>@enderror
             </div>
             <div class="form-group">
-                <div class="checkbox-group">
-                    <input type="hidden" name="is_active" value="0">
-                    <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $poliklinik->is_active) ? 'checked' : '' }}>
-                    <label for="is_active" style="margin:0">Aktif</label>
-                </div>
+                <label for="day_of_week">Hari</label>
+                <select name="day_of_week" id="day_of_week" required>
+                    <option value="">Pilih Hari</option>
+                    @foreach($days as $d)
+                        <option value="{{ $d }}" {{ old('day_of_week') === $d ? 'selected' : '' }}>{{ $d }}</option>
+                    @endforeach
+                </select>
+                @error('day_of_week')<div class="error">{{ $message }}</div>@enderror
+            </div>
+            <div class="form-group">
+                <label for="start_time">Jam Mulai</label>
+                <input type="time" name="start_time" id="start_time" value="{{ old('start_time') }}" required>
+                @error('start_time')<div class="error">{{ $message }}</div>@enderror
+            </div>
+            <div class="form-group">
+                <label for="end_time">Jam Selesai</label>
+                <input type="time" name="end_time" id="end_time" value="{{ old('end_time') }}" required>
+                @error('end_time')<div class="error">{{ $message }}</div>@enderror
+            </div>
+            <div class="form-group">
+                <label for="max_patients">Maks Pasien</label>
+                <input type="number" name="max_patients" id="max_patients" value="{{ old('max_patients', 20) }}" min="1" max="100" required>
+                @error('max_patients')<div class="error">{{ $message }}</div>@enderror
             </div>
             <div class="actions">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('polikliniks.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ route('jadwal-dokter.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>
     </div>

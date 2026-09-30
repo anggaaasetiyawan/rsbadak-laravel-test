@@ -36,6 +36,6 @@ class Dokter extends Model
 
     public function registrations()
     {
-        return $this->hasMany(Registration::class);
+        return $this->hasMany(Registrasi::class, 'doctor_id');
     }
 }

@@ -4,6 +4,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\PoliklinikController;
+use App\Http\Controllers\PasienController;
+use App\Http\Controllers\JadwalDokterController;
+use App\Http\Controllers\RegistrasiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,4 +34,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('dokters', DokterController::class);
     Route::resource('polikliniks', PoliklinikController::class);
+    Route::resource('pasien', PasienController::class);
+    Route::resource('jadwal-dokter', JadwalDokterController::class);
+    Route::resource('registrasi', RegistrasiController::class);
+    Route::post('registrasi/{registrasi}/cancel', [RegistrasiController::class, 'cancel'])->name('registrasi.cancel');
+    Route::get('registrasi/{registrasi}/print', [RegistrasiController::class, 'print'])->name('registrasi.print');
 });

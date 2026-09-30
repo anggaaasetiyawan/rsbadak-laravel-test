@@ -43,8 +43,11 @@
     <nav>
         <div>
             <a href="/admin/dashboard">Dashboard</a>
+            <a href="{{ route('pasien.index') }}">Pasien</a>
             <a href="{{ route('dokters.index') }}" style="color:#fff">Dokter</a>
             <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
+            <a href="{{ route('jadwal-dokter.index') }}">Jadwal</a>
+            <a href="{{ route('registrasi.index') }}">Registrasi</a>
         </div>
         <div class="right">
             <span>{{ Auth::user()->name }}</span>
@@ -65,7 +68,7 @@
         </div>
 
         <form method="GET" class="search-bar">
-            <input type="text" name="search" placeholder="Cari nama / SIP..." value="{{ request('search') }}">
+            <input type="text" name="search" placeholder="Cari nama dokter" value="{{ request('search') }}">
             <select name="polyclinic_id">
                 <option value="">Semua Poli</option>
                 @foreach($polyclinics as $p)

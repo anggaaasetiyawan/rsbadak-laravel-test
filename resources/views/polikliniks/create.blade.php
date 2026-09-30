@@ -32,8 +32,11 @@
     <nav>
         <div>
             <a href="/admin/dashboard">Dashboard</a>
+            <a href="{{ route('pasien.index') }}">Pasien</a>
             <a href="{{ route('dokters.index') }}">Dokter</a>
             <a href="{{ route('polikliniks.index') }}" style="color:#fff">Poliklinik</a>
+            <a href="{{ route('jadwal-dokter.index') }}">Jadwal</a>
+            <a href="{{ route('registrasi.index') }}">Registrasi</a>
         </div>
         <div class="right">
             <span>{{ Auth::user()->name }}</span>
