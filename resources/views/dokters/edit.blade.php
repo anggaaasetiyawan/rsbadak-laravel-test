@@ -35,6 +35,7 @@
         <div>
             <a href="/admin/dashboard">Dashboard</a>
             <a href="{{ route('dokters.index') }}">Dokter</a>
+            <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
         </div>
         <div class="right">
             <span>{{ Auth::user()->name }}</span>

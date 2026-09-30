@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dokter</title>
+    <title>Poliklinik</title>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; margin: 0; }
         nav { background: #111; color: #fff; padding: .75rem 2rem; display: flex; justify-content: space-between; align-items: center; }
@@ -24,7 +24,7 @@
         .btn-danger { background: #991b1b; color: #fff; }
         .btn-danger:hover { background: #7f1d1d; }
         .search-bar { display: flex; gap: .5rem; margin-bottom: 1rem; }
-        .search-bar input, .search-bar select { padding: .4rem .6rem; border: 1px solid #ccc; font-size: .875rem; }
+        .search-bar input { padding: .4rem .6rem; border: 1px solid #ccc; font-size: .875rem; flex: 1; max-width: 300px; }
         .search-bar button { padding: .4rem .75rem; background: #111; color: #fff; border: 0; font-size: .875rem; cursor: pointer; }
         table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #ddd; }
         th, td { text-align: left; padding: .6rem .75rem; font-size: .875rem; border-bottom: 1px solid #eee; }
@@ -43,8 +43,8 @@
     <nav>
         <div>
             <a href="/admin/dashboard">Dashboard</a>
-            <a href="{{ route('dokters.index') }}" style="color:#fff">Dokter</a>
-            <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
+            <a href="{{ route('dokters.index') }}">Dokter</a>
+            <a href="{{ route('polikliniks.index') }}" style="color:#fff">Poliklinik</a>
         </div>
         <div class="right">
             <span>{{ Auth::user()->name }}</span>
@@ -60,18 +60,12 @@
         @endif
 
         <div class="header">
-            <h1>Data Dokter</h1>
-            <a href="{{ route('dokters.create') }}" class="btn btn-primary">+ Tambah Dokter</a>
+            <h1>Data Poliklinik</h1>
+            <a href="{{ route('polikliniks.create') }}" class="btn btn-primary">+ Tambah Poliklinik</a>
         </div>
 
         <form method="GET" class="search-bar">
-            <input type="text" name="search" placeholder="Cari nama / SIP..." value="{{ request('search') }}">
-            <select name="polyclinic_id">
-                <option value="">Semua Poli</option>
-                @foreach($polyclinics as $p)
-                    <option value="{{ $p->id }}" {{ request('polyclinic_id') == $p->id ? 'selected' : '' }}>{{ $p->name }}</option>
-                @endforeach
-            </select>
+            <input type="text" name="search" placeholder="Cari nama poli..." value="{{ request('search') }}">
             <button type="submit">Cari</button>
         </form>
 
@@ -79,30 +73,26 @@
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama</th>
-                    <th>SIP</th>
-                    <th>Poli</th>
-                    <th>Telepon</th>
+                    <th>Nama Poliklinik</th>
+                    <th>Jumlah dokter</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($dokter as $d)
+                @forelse($polyclinics as $p)
                 <tr>
-                    <td>{{ ($dokter->currentPage() - 1) * $dokter->perPage() + $loop->iteration }}</td>
-                    <td>{{ $d->name }}</td>
-                    <td>{{ $d->sip_no ?? '-' }}</td>
-                    <td>{{ $d->polyclinic->name ?? '-' }}</td>
-                    <td>{{ $d->phone ?? '-' }}</td>
+                    <td>{{ ($polyclinics->currentPage() - 1) * $polyclinics->perPage() + $loop->iteration }}</td>
+                    <td>{{ $p->name }}</td>
+                    <td>{{ $p->dokters_count ?? $p->dokters()->count() }}</td>
                     <td>
-                        <span class="badge {{ $d->is_active ? 'badge-active' : 'badge-inactive' }}">
-                            {{ $d->is_active ? 'Aktif' : 'Nonaktif' }}
+                        <span class="badge {{ $p->is_active ? 'badge-active' : 'badge-inactive' }}">
+                            {{ $p->is_active ? 'Aktif' : 'Nonaktif' }}
                         </span>
                     </td>
                     <td class="actions">
-                        <a href="{{ route('dokters.edit', $d) }}" class="btn btn-sm btn-primary">Edit</a>
-                        <form method="POST" action="{{ route('dokters.destroy', $d) }}" onsubmit="return confirm('Hapus dokter ini?')">
+                        <a href="{{ route('polikliniks.edit', $p) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ route('polikliniks.destroy', $p) }}" onsubmit="return confirm('Hapus poliklinik ini?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
@@ -111,13 +101,13 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" style="text-align:center;color:#888;padding:2rem">Belum ada data dokter.</td>
+                    <td colspan="5" style="text-align:center;color:#888;padding:2rem">Belum ada data poliklinik.</td>
                 </tr>
                 @endforelse
             </tbody>
         </table>
 
-        <div class="pagination">{{ $dokter->links() }}</div>
+        <div class="pagination">{{ $polyclinics->links() }}</div>
     </div>
 </body>
 </html>

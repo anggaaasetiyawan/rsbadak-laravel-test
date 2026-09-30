@@ -43,6 +43,7 @@
         <div>
             <a href="/admin/dashboard"style="color:#aaa;text-decoration:none;font-size:.875rem;margin-right:1rem">Dashboard</a>
             <a href="{{ route('dokters.index') }}" style="color:#aaa;text-decoration:none;font-size:.875rem;margin-right:1rem">Dokter</a>
+            <a href="{{ route('polikliniks.index') }}" style="color:#aaa;text-decoration:none;font-size:.875rem;margin-right:1rem">Poliklinik</a>
         </div>
         <div style="display:flex;align-items:center;gap:1rem">
             <span>{{ Auth::user()->name }}</span>

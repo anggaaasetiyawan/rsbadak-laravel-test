@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DokterController;
+use App\Http\Controllers\PoliklinikController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,4 +30,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/petugas/dashboard', fn () => view('dashboard'));
 
     Route::resource('dokters', DokterController::class);
+    Route::resource('polikliniks', PoliklinikController::class);
 });

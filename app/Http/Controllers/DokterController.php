@@ -21,10 +21,10 @@ class DokterController extends Controller
             $query->where('polyclinic_id', $polyclinic_id);
         }
 
-        $doctors = $query->orderBy('name')->paginate(15)->withQueryString();
+        $dokter = $query->orderBy('name')->paginate(15)->withQueryString();
         $polyclinics = Polyclinic::where('is_active', true)->orderBy('name')->get();
 
-        return view('dokters.index', compact('doctors', 'polyclinics'));
+        return view('dokters.index', compact('dokter', 'polyclinics'));
     }
 
     public function create()
@@ -37,28 +37,28 @@ class DokterController extends Controller
     {
         $validated = $request->validate([
             'polyclinic_id' => 'required|exists:polyclinics,id',
-            'sip_no' => 'nullable|string|max:50|unique:doctors,sip_no',
+            'sip_no' => 'nullable|string|max:50|unique:dokters,sip_no',
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
         ]);
 
         $validated['is_active'] = true;
-        Dokter::create($validated);
+        dokter::create($validated);
 
         return redirect()->route('dokters.index')->with('success', 'Data dokter berhasil ditambahkan.');
     }
 
-    public function edit(Dokter $dokter)
+    public function edit(dokter $dokter)
     {
         $polyclinics = Polyclinic::where('is_active', true)->orderBy('name')->get();
         return view('dokters.edit', compact('dokter', 'polyclinics'));
     }
 
-    public function update(Request $request, Dokter $dokter)
+    public function update(Request $request, dokter $dokter)
     {
         $validated = $request->validate([
             'polyclinic_id' => 'required|exists:polyclinics,id',
-            'sip_no' => 'nullable|string|max:50|unique:doctors,sip_no,' . $dokter->id,
+            'sip_no' => 'nullable|string|max:50|unique:dokter,sip_no,' . $dokter->id,
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'is_active' => 'boolean',
@@ -68,11 +68,11 @@ class DokterController extends Controller
         return redirect()->route('dokters.index')->with('success', 'Data dokter berhasil diperbarui.');
     }
 
-    public function destroy(Dokter $dokter)
+    public function destroy(dokter $dokter)
     {
         if ($dokter->registrations()->exists()) {
             $dokter->update(['is_active' => false]);
-            return redirect()->route('dokters.index')->with('success', 'Dokter dinonaktifkan karena masih memiliki data terkait.');
+            return redirect()->route('dokters.index')->with('success', 'dokter dinonaktifkan karena masih memiliki data terkait.');
         }
         $dokter->delete();
         return redirect()->route('dokters.index')->with('success', 'Data dokter berhasil dihapus.');
