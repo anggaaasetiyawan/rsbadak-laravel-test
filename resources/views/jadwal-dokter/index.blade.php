@@ -39,30 +39,14 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="/admin/dashboard">Dashboard</a>
-            <a href="{{ route('pasien.index') }}">Pasien</a>
-            <a href="{{ route('dokters.index') }}">Dokter</a>
-            <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
-            <a href="{{ route('jadwal-dokter.index') }}" style="color:#fff">Jadwal</a>
-            <a href="{{ route('registrasi.index') }}">Registrasi</a>
-        </div>
-        <div class="right">
-            <span>{{ Auth::user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('partials.nav')
     <div class="container">
         @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
         @if(session('error'))<div class="alert alert-error">{{ session('error') }}</div>@endif
 
         <div class="header">
             <h1>Jadwal Dokter</h1>
-            <a href="{{ route('jadwal-dokter.create') }}" class="btn btn-primary">+ Tambah Jadwal</a>
+            <a href="{{ role_route('jadwal-dokter.create') }}" class="btn btn-primary">+ Tambah Jadwal</a>
         </div>
 
         <form class="search" method="GET">
@@ -104,8 +88,8 @@
                     <td>{{ $s->max_patients }}</td>
                     <td><span class="badge {{ $s->is_active ? 'badge-active' : 'badge-inactive' }}">{{ $s->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
                     <td>
-                        <a href="{{ route('jadwal-dokter.edit', $s) }}" class="btn btn-sm btn-primary">Edit</a>
-                        <form method="POST" action="{{ route('jadwal-dokter.destroy', $s) }}" style="display:inline" onsubmit="return confirm('Hapus jadwal ini?')">
+                        <a href="{{ role_route('jadwal-dokter.edit', $s) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ role_route('jadwal-dokter.destroy', $s) }}" style="display:inline" onsubmit="return confirm('Hapus jadwal ini?')">
                             @csrf @method('DELETE')
                             <button class="btn btn-sm btn-danger">Hapus</button>
                         </form>

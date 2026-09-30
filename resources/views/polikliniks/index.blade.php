@@ -40,23 +40,7 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="/admin/dashboard">Dashboard</a>
-            <a href="{{ route('pasien.index') }}">Pasien</a>
-            <a href="{{ route('dokters.index') }}">Dokter</a>
-            <a href="{{ route('polikliniks.index') }}" style="color:#fff">Poliklinik</a>
-            <a href="{{ route('jadwal-dokter.index') }}">Jadwal</a>
-            <a href="{{ route('registrasi.index') }}">Registrasi</a>
-        </div>
-        <div class="right">
-            <span>{{ Auth::user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('partials.nav')
     <div class="container">
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -64,7 +48,7 @@
 
         <div class="header">
             <h1>Data Poliklinik</h1>
-            <a href="{{ route('polikliniks.create') }}" class="btn btn-primary">+ Tambah Poliklinik</a>
+            <a href="{{ role_route('polikliniks.create') }}" class="btn btn-primary">+ Tambah Poliklinik</a>
         </div>
 
         <form method="GET" class="search-bar">
@@ -94,8 +78,8 @@
                         </span>
                     </td>
                     <td class="actions">
-                        <a href="{{ route('polikliniks.edit', $p) }}" class="btn btn-sm btn-primary">Edit</a>
-                        <form method="POST" action="{{ route('polikliniks.destroy', $p) }}" onsubmit="return confirm('Hapus poliklinik ini?')">
+                        <a href="{{ role_route('polikliniks.edit', $p) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <form method="POST" action="{{ role_route('polikliniks.destroy', $p) }}" onsubmit="return confirm('Hapus poliklinik ini?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-danger">Hapus</button>

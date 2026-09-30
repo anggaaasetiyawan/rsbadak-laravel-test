@@ -39,30 +39,14 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="/admin/dashboard">Dashboard</a>
-            <a href="{{ route('pasien.index') }}">Pasien</a>
-            <a href="{{ route('dokters.index') }}">Dokter</a>
-            <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
-            <a href="{{ route('jadwal-dokter.index') }}">Jadwal</a>
-            <a href="{{ route('registrasi.index') }}" style="color:#fff">Registrasi</a>
-        </div>
-        <div class="right">
-            <span>{{ Auth::user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('partials.nav')
     <div class="container">
         @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
         @if(session('error'))<div class="alert alert-error">{{ session('error') }}</div>@endif
 
         <div class="header">
             <h1>Registrasi Pasien</h1>
-            <a href="{{ route('registrasi.create') }}" class="btn btn-primary">+ Registrasi Baru</a>
+            <a href="{{ role_route('registrasi.create') }}" class="btn btn-primary">+ Registrasi Baru</a>
         </div>
 
         <form class="search" method="GET">
@@ -115,8 +99,8 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('registrasi.show', $r) }}" class="btn btn-sm btn-secondary">Detail</a>
-                        <a href="{{ route('registrasi.edit', $r) }}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="{{ role_route('registrasi.show', $r) }}" class="btn btn-sm btn-secondary">Detail</a>
+                        <a href="{{ role_route('registrasi.edit', $r) }}" class="btn btn-sm btn-primary">Edit</a>
                     </td>
                 </tr>
                 @empty

@@ -3,17 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasien</title>
+    <title>Pengguna</title>
     <style>
         body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; margin: 0; }
-        nav { background: #111; color: #fff; padding: .75rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-        nav a { color: #aaa; text-decoration: none; font-size: .875rem; margin-right: 1rem; }
-        nav a:hover { color: #fff; }
-        nav .right { display: flex; align-items: center; gap: 1rem; }
-        nav .right span { font-size: .8rem; color: #aaa; }
-        nav .right form { display: inline; }
-        nav .right button { background: none; border: 1px solid #555; color: #fff; padding: .3rem .75rem; font-size: .8rem; cursor: pointer; }
-        nav .right button:hover { border-color: #fff; }
         .container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         h1 { font-size: 1.25rem; margin: 0; }
@@ -32,6 +24,8 @@
         .badge { display: inline-block; padding: .1rem .4rem; font-size: .7rem; border-radius: 3px; }
         .badge-active { background: #dcfce7; color: #166534; }
         .badge-inactive { background: #fee2e2; color: #991b1b; }
+        .badge-admin { background: #dbeafe; color: #1e40af; }
+        .badge-petugas { background: #fef3c7; color: #92400e; }
         .pagination { margin-top: 1rem; }
         .alert { padding: .5rem .75rem; margin-bottom: 1rem; font-size: .875rem; border: 1px solid; }
         .alert-success { background: #dcfce7; border-color: #86efac; color: #166534; }
@@ -45,54 +39,58 @@
         @if(session('error'))<div class="alert alert-error">{{ session('error') }}</div>@endif
 
         <div class="header">
-            <h1>Data Pasien</h1>
-            <a href="{{ role_route('pasien.create') }}" class="btn btn-primary">+ Tambah Pasien</a>
+            <h1>Manajemen Pengguna</h1>
+            <a href="{{ route('admin.users.create') }}" class="btn btn-primary">+ Tambah Pengguna</a>
         </div>
 
         <form class="search" method="GET">
-            <input type="text" name="search" placeholder="Cari nama, RM, atau NIK..." value="{{ request('search') }}">
+            <input type="text" name="search" placeholder="Cari nama atau email..." value="{{ request('search') }}">
             <button type="submit">Cari</button>
         </form>
 
         <table>
             <thead>
                 <tr>
-                    <th>No. RM</th>
                     <th>Nama</th>
-                    <th>NIK</th>
-                    <th>Tgl Lahir</th>
-                    <th>JK</th>
-                    <th>Telepon</th>
+                    <th>Email</th>
+                    <th>Role</th>
                     <th>Status</th>
+                    <th>Dibuat</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($pasien as $p)
+                @forelse($users as $u)
                 <tr>
-                    <td>{{ $p->medical_record_no }}</td>
-                    <td>{{ $p->name }}</td>
-                    <td>{{ $p->nik ?? '-' }}</td>
-                    <td>{{ $p->birth_date?->format('d/m/Y') ?? '-' }}</td>
-                    <td>{{ $p->gender === 'L' ? 'Laki-laki' : ($p->gender === 'P' ? 'Perempuan' : '-') }}</td>
-                    <td>{{ $p->phone ?? '-' }}</td>
-                    <td><span class="badge {{ $p->is_active ? 'badge-active' : 'badge-inactive' }}">{{ $p->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
+                    <td>{{ $u->name }}</td>
+                    <td>{{ $u->email }}</td>
                     <td>
-                        <a href="{{ role_route('pasien.edit', $p) }}" class="btn btn-sm btn-primary">Edit</a>
-                        @if($p->is_active)
-                        <form method="POST" action="{{ role_route('pasien.destroy', $p) }}" style="display:inline" onsubmit="return confirm('Nonaktifkan pasien ini?')">
+                        <span class="badge {{ $u->role === 'admin' ? 'badge-admin' : 'badge-petugas' }}">
+                            {{ ucfirst($u->role) }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge {{ $u->is_active ? 'badge-active' : 'badge-inactive' }}">
+                            {{ $u->is_active ? 'Aktif' : 'Nonaktif' }}
+                        </span>
+                    </td>
+                    <td>{{ $u->created_at?->format('d/m/Y') ?? '-' }}</td>
+                    <td>
+                        <a href="{{ route('admin.users.edit', $u) }}" class="btn btn-sm btn-primary">Edit</a>
+                        @if($u->id !== Auth::id())
+                        <form method="POST" action="{{ route('admin.users.destroy', $u) }}" style="display:inline" onsubmit="return confirm('Hapus pengguna ini?')">
                             @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-danger">Nonaktif</button>
+                            <button class="btn btn-sm btn-danger">Hapus</button>
                         </form>
                         @endif
                     </td>
                 </tr>
                 @empty
-                <tr><td colspan="8" style="text-align:center;color:#888;padding:2rem">Belum ada data pasien.</td></tr>
+                <tr><td colspan="6" style="text-align:center;color:#888;padding:2rem">Belum ada data pengguna.</td></tr>
                 @endforelse
             </tbody>
         </table>
-        <div class="pagination">{{ $pasien->links() }}</div>
+        <div class="pagination">{{ $users->links() }}</div>
     </div>
 </body>
 </html>

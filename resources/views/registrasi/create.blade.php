@@ -29,27 +29,11 @@
     </style>
 </head>
 <body>
-    <nav>
-        <div>
-            <a href="/admin/dashboard">Dashboard</a>
-            <a href="{{ route('pasien.index') }}">Pasien</a>
-            <a href="{{ route('dokters.index') }}">Dokter</a>
-            <a href="{{ route('polikliniks.index') }}">Poliklinik</a>
-            <a href="{{ route('jadwal-dokter.index') }}">Jadwal</a>
-            <a href="{{ route('registrasi.index') }}" style="color:#fff">Registrasi</a>
-        </div>
-        <div class="right">
-            <span>{{ Auth::user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Logout</button>
-            </form>
-        </div>
-    </nav>
+    @include('partials.nav')
     <div class="container">
         <h1>Tambah Registrasi</h1>
 
-        <form method="POST" action="{{ route('registrasi.store') }}">
+        <form method="POST" action="{{ role_route('registrasi.store') }}">
             @csrf
             <div class="form-group">
                 <label for="patient_id">Pasien</label>
@@ -93,7 +77,7 @@
             </div>
             <div class="actions">
                 <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('registrasi.index') }}" class="btn btn-secondary">Batal</a>
+                <a href="{{ role_route('registrasi.index') }}" class="btn btn-secondary">Batal</a>
             </div>
         </form>
     </div>
